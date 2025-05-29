@@ -1,0 +1,624 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>For My fizu ❤️</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #ffafbd, #ffc3a0);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 15px;
+            overflow-x: hidden;
+            touch-action: manipulation;
+        }
+        
+        .container {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+            width: 100%;
+            max-width: 500px;
+            padding: 20px;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.4s ease;
+        }
+        
+        .heart {
+            position: absolute;
+            font-size: 18px;
+            color: rgba(255, 0, 0, 0.25);
+            z-index: 0;
+            pointer-events: none;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 25px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        h1 {
+            color: #ff6b6b;
+            font-size: 2rem;
+            margin-bottom: 8px;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1);
+        }
+        
+        .subtitle {
+            color: #555;
+            font-size: 1rem;
+            margin-bottom: 15px;
+        }
+        
+        .screen {
+            display: none;
+            animation: fadeIn 0.6s ease;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .active {
+            display: block;
+        }
+        
+        .welcome-screen {
+            text-align: center;
+        }
+        
+        .welcome-screen img {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 4px solid #ff6b6b;
+            margin: 15px auto;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+        }
+        
+        .welcome-message {
+            font-size: 1.1rem;
+            color: #555;
+            line-height: 1.5;
+            margin: 15px 0;
+            padding: 0 5px;
+        }
+        
+        .welcome-message span {
+            color: #ff6b6b;
+            font-weight: bold;
+        }
+        
+        .btn {
+            background: linear-gradient(to right, #ff6b6b, #ff8e8e);
+            color: white;
+            border: none;
+            padding: 14px 35px;
+            font-size: 1.1rem;
+            border-radius: 50px;
+            cursor: pointer;
+            margin: 15px 8px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(255, 107, 107, 0.35);
+            display: inline-block;
+            min-width: 180px;
+        }
+        
+        .btn:active {
+            transform: translateY(2px);
+            box-shadow: 0 2px 8px rgba(255, 107, 107, 0.4);
+        }
+        
+        .quiz-screen .question {
+            font-size: 1.3rem;
+            margin-bottom: 20px;
+            color: #444;
+            font-weight: 600;
+            line-height: 1.4;
+        }
+        
+        .options {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 12px;
+            margin-bottom: 25px;
+        }
+        
+        .option {
+            background: #f9f9f9;
+            border: 2px solid #e0e0e0;
+            border-radius: 15px;
+            padding: 14px;
+            font-size: 1.05rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            position: relative;
+            overflow: hidden;
+            -webkit-user-select: none;
+            user-select: none;
+        }
+        
+        .option:active {
+            transform: scale(0.98);
+        }
+        
+        .option.selected {
+            background: #ffebee;
+            border-color: #ff6b6b;
+            transform: translateX(8px);
+        }
+        
+        .option.correct {
+            background: #e8f5e9;
+            border-color: #4caf50;
+        }
+        
+        .option.incorrect {
+            background: #ffebee;
+            border-color: #f44336;
+        }
+        
+        .progress {
+            height: 8px;
+            background: #e0e0e0;
+            border-radius: 4px;
+            margin: 20px 0;
+            overflow: hidden;
+        }
+        
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(to right, #ff6b6b, #ff8e8e);
+            width: 0%;
+            transition: width 0.4s ease;
+        }
+        
+        .round-indicator {
+            text-align: center;
+            font-size: 1.1rem;
+            color: #ff6b6b;
+            margin-bottom: 15px;
+            font-weight: bold;
+        }
+        
+        .result-screen {
+            text-align: center;
+        }
+        
+        .score {
+            font-size: 4rem;
+            color: #ff6b6b;
+            margin: 25px 0;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        
+        .message {
+            font-size: 1.5rem;
+            color: #333;
+            margin-bottom: 25px;
+            line-height: 1.4;
+        }
+        
+        .video-container {
+            width: 100%;
+            max-width: 100%;
+            margin: 20px auto;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+            display: none;
+        }
+        
+        video {
+            width: 100%;
+            display: block;
+        }
+        
+        .play-video-btn {
+            background: linear-gradient(to right, #4caf50, #8bc34a);
+        }
+        
+        .restart-btn {
+            background: linear-gradient(to right, #2196f3, #21cbf3);
+        }
+        
+        .heart-animation {
+            position: absolute;
+            pointer-events: none;
+            opacity: 0;
+            z-index: 10;
+        }
+        
+        @keyframes float {
+            0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(-80px) rotate(360deg); opacity: 0; }
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.03); }
+            100% { transform: scale(1); }
+        }
+        
+        .pulse {
+            animation: pulse 1.5s infinite;
+        }
+        
+        .btn-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .mobile-tap-hint {
+            font-size: 0.9rem;
+            color: #777;
+            margin-top: 10px;
+            text-align: center;
+        }
+        
+        /* Mobile-specific optimizations */
+        @media (max-width: 480px) {
+            .container {
+                padding: 15px;
+                border-radius: 16px;
+            }
+            
+            h1 {
+                font-size: 1.8rem;
+            }
+            
+            .question {
+                font-size: 1.2rem;
+            }
+            
+            .btn {
+                padding: 14px 30px;
+                font-size: 1rem;
+                min-width: 160px;
+                width: 100%;
+                max-width: 280px;
+            }
+            
+            .score {
+                font-size: 3.5rem;
+            }
+            
+            .message {
+                font-size: 1.4rem;
+            }
+            
+            .welcome-message {
+                font-size: 1rem;
+            }
+            
+            .option {
+                padding: 12px;
+                font-size: 1rem;
+            }
+            
+            .heart {
+                font-size: 16px;
+            }
+        }
+        
+        @media (max-width: 360px) {
+            h1 {
+                font-size: 1.6rem;
+            }
+            
+            .message {
+                font-size: 1.3rem;
+            }
+            
+            .score {
+                font-size: 3rem;
+            }
+            
+            .btn {
+                font-size: 0.95rem;
+                padding: 13px 25px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Hearts floating in the background -->
+        <div class="heart" style="top: 5%; left: 5%;">❤️</div>
+        <div class="heart" style="top: 12%; right: 8%;">❤️</div>
+        <div class="heart" style="bottom: 18%; left: 12%;">❤️</div>
+        <div class="heart" style="bottom: 8%; right: 4%;">❤️</div>
+        
+        <!-- Welcome Screen -->
+        <div id="welcome-screen" class="screen active">
+            <div class="header">
+                <h1>For you fizu ❤️</h1>
+                <div class="subtitle">A special quiz made just for you!</div>
+            </div>
+            
+            <div class="welcome-screen">
+                <div class="profile-placeholder">
+                    <i class="fas fa-heart" style="font-size: 100px; color: #ff6b6b;"></i>
+                </div>
+                <div class="welcome-message">
+                    <p>Hey <span>Beautiful</span>,</p>
+                    <p>I know I've been silly lately, and I'm truly sorry. I made this little quiz to show how much I know and care about you.</p>
+                    <p>Get <span>3 out of 5</span> correct and you'll get a special surprise!</p>
+                    <p>Love you always ❤️</p>
+                </div>
+                <div class="mobile-tap-hint">(Tap anywhere to interact)</div>
+                <button id="start-btn" class="btn pulse">Start the Quiz!</button>
+            </div>
+        </div>
+        
+        <!-- Quiz Screen -->
+        <div id="quiz-screen" class="screen">
+            <div class="header">
+                <h1>How Well Do I Know You?</h1>
+                <div class="round-indicator">Round <span id="current-round">1</span> of 5</div>
+            </div>
+            
+            <div class="progress">
+                <div class="progress-bar" id="quiz-progress"></div>
+            </div>
+            
+            <div class="question" id="question">Question will appear here</div>
+            
+            <div class="options" id="options">
+                <!-- Options will be added dynamically -->
+            </div>
+            
+            <div style="text-align: center;">
+                <button id="next-btn" class="btn">Next Question</button>
+            </div>
+        </div>
+        
+        <!-- Result Screen -->
+        <div id="result-screen" class="screen">
+            <div class="header">
+                <h1>Quiz Results</h1>
+            </div>
+            
+            <div class="result-screen">
+                <div class="score" id="final-score">0/5</div>
+                <disv class="message" id="result-message">Calculating your results...</div>
+                
+                <div class="video-container" id="video-container">
+                    <video id="surprise-video" controls playsinline>
+                        <source src="untitled-video-made-with-clipchamp_nhAZKVEu.mp4" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
+                </div>
+                
+                <div class="btn-container">
+                    <button id="play-video-btn" class="btn play-video-btn">Play Your Surprise Video!</button>
+                    <button id="restart-btn" class="btn restart-btn">Take Quiz Again</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Quiz questions and answers
+        const quizData = [
+            {
+                question: "What's my favorite thing about you?",
+                options: ["apki khubsurat smile", "apka paak saaf dil", "apki koohinoor jesi aakhe", "purriii aaap"],
+                correct: 3
+            },
+            {
+                question: "mane phli baar apko kab dekha tha?",
+                options: ["car chalate hue", "Ice cream khate hue", "khuwab meh", "jab meh bacha tha"],
+                correct: 1
+            },
+            {
+                question: "What's my fav desert😁?",
+                options: ["Chocolate cake", "Ice cream", "cheekee cheekee", "Fruit tart"],
+                correct: 2
+            },
+            {
+                question: "What song always reminds me of you?",
+                options: ["Perfect by Ed Sheeran", "Can't Help Falling in Love", "A Thousand Years", "All of the Above"],
+                correct: 3
+            },
+            {
+                question: "kya fizu meh itna bura hu?",
+                options: ["bohut bura", "10X bura", "100C bura", "duniya sa sab se bura ladka"],
+                correct: 3
+            }
+        ];
+
+        // DOM elements
+        const welcomeScreen = document.getElementById('welcome-screen');
+        const quizScreen = document.getElementById('quiz-screen');
+        const resultScreen = document.getElementById('result-screen');
+        const startBtn = document.getElementById('start-btn');
+        const nextBtn = document.getElementById('next-btn');
+        const questionEl = document.getElementById('question');
+        const optionsEl = document.getElementById('options');
+        const currentRoundEl = document.getElementById('current-round');
+        const progressBar = document.getElementById('quiz-progress');
+        const finalScoreEl = document.getElementById('final-score');
+        const resultMessageEl = document.getElementById('result-message');
+        const videoContainer = document.getElementById('video-container');
+        const playVideoBtn = document.getElementById('play-video-btn');
+        const restartBtn = document.getElementById('restart-btn');
+        const surpriseVideo = document.getElementById('surprise-video');
+
+        // Quiz state
+        let currentQuestion = 0;
+        let score = 0;
+        let selectedOption = null;
+
+        // Create floating hearts animation (optimized for mobile)
+        function createHearts() {
+            const container = document.querySelector('.container');
+            const heartCount = 8; // Reduced for mobile performance
+            
+            for (let i = 0; i < heartCount; i++) {
+                const heart = document.createElement('div');
+                heart.classList.add('heart-animation');
+                heart.innerHTML = '❤️';
+                heart.style.left = Math.random() * 90 + 5 + '%';
+                heart.style.top = Math.random() * 80 + 10 + '%';
+                heart.style.fontSize = (Math.random() * 16 + 10) + 'px';
+                heart.style.animation = `float ${Math.random() * 3 + 2}s linear forwards`;
+                container.appendChild(heart);
+                
+                setTimeout(() => {
+                    heart.remove();
+                }, 4000);
+            }
+        }
+
+        // Initialize quiz
+        startBtn.addEventListener('click', () => {
+            welcomeScreen.classList.remove('active');
+            quizScreen.classList.add('active');
+            loadQuestion();
+            
+            // Create hearts animation on start (less frequent for mobile)
+            setInterval(createHearts, 800);
+        });
+
+        // Load question
+        function loadQuestion() {
+            resetOptions();
+            const currentQuizData = quizData[currentQuestion];
+            questionEl.innerText = currentQuizData.question;
+            currentRoundEl.innerText = currentQuestion + 1;
+            
+            // Update progress bar
+            progressBar.style.width = ((currentQuestion + 1) / quizData.length * 100) + '%';
+            
+            // Add options
+            currentQuizData.options.forEach((option, index) => {
+                const optionElement = document.createElement('div');
+                optionElement.classList.add('option');
+                optionElement.innerText = option;
+                optionElement.dataset.index = index;
+                optionElement.addEventListener('click', selectOption);
+                optionsEl.appendChild(optionElement);
+            });
+        }
+
+        // Select option
+        function selectOption(e) {
+            if (selectedOption !== null) return;
+            
+            const selected = e.target;
+            selectedOption = parseInt(selected.dataset.index);
+            
+            // Highlight selected option
+            const options = document.querySelectorAll('.option');
+            options.forEach(option => option.classList.remove('selected'));
+            selected.classList.add('selected');
+            
+            // Enable next button
+            nextBtn.disabled = false;
+        }
+
+        // Reset options
+        function resetOptions() {
+            optionsEl.innerHTML = '';
+            selectedOption = null;
+            nextBtn.disabled = true;
+        }
+
+        // Next button
+        nextBtn.addEventListener('click', () => {
+            // Check if answer is correct
+            if (selectedOption === quizData[currentQuestion].correct) {
+                score++;
+                
+                // Add floating hearts for correct answer
+                createHearts();
+            }
+            
+            currentQuestion++;
+            
+            if (currentQuestion < quizData.length) {
+                loadQuestion();
+            } else {
+                showResults();
+            }
+        });
+
+        // Show results
+        function showResults() {
+            quizScreen.classList.remove('active');
+            resultScreen.classList.add('active');
+            
+            finalScoreEl.innerText = `${score}/${quizData.length}`;
+            
+            if (score >= 3) {
+                resultMessageEl.innerHTML = `Congratulations, Beautiful! ❤️<br>You got ${score} out of ${quizData.length} correct!<br>You've won a special surprise!`;
+                playVideoBtn.style.display = 'block';
+            } else {
+                resultMessageEl.innerHTML = `You got ${score} out of ${quizData.length} correct.<br>Don't worry, I still love you more than anything! ❤️`;
+                playVideoBtn.style.display = 'none';
+            }
+        }
+
+        // Play surprise video
+        playVideoBtn.addEventListener('click', () => {
+            videoContainer.style.display = 'block';
+            surpriseVideo.play();
+            playVideoBtn.style.display = 'none';
+            
+            // Make video fullscreen on mobile
+            if (surpriseVideo.requestFullscreen) {
+                surpriseVideo.requestFullscreen();
+            } else if (surpriseVideo.webkitRequestFullscreen) {
+                surpriseVideo.webkitRequestFullscreen();
+            } else if (surpriseVideo.msRequestFullscreen) {
+                surpriseVideo.msRequestFullscreen();
+            }
+        });
+
+        // Restart quiz
+        restartBtn.addEventListener('click', () => {
+            currentQuestion = 0;
+            score = 0;
+            resultScreen.classList.remove('active');
+            welcomeScreen.classList.add('active');
+            videoContainer.style.display = 'none';
+            surpriseVideo.pause();
+            surpriseVideo.currentTime = 0;
+        });
+
+        // Initial setup
+        nextBtn.disabled = true;
+        playVideoBtn.style.display = 'none';
+        
+        // Create initial hearts (less for mobile)
+        setInterval(createHearts, 1500);
+        
+        // Prevent accidental zooming
+        document.addEventListener('gesturestart', function(e) {
+            e.preventDefault();
+        });
+    </script>
+</body>
+</html>
